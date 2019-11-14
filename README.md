@@ -1,4 +1,4 @@
-**Welcome @wpolicarpo and @packrat386 as new maintainers for `rspec-sidekiq`!**
+**Welcome @packrat386 as new maintainer for `rspec-sidekiq`!**
 
 # RSpec for Sidekiq
 
@@ -52,7 +52,7 @@ end
 * [be_processed_in](#be_processed_in)
 * [be_retryable](#be_retryable)
 * [be_unique](#be_unique)
-* [have_enqueued_job](#have_enqueued_job)
+* [have_enqueued_sidekiq_job](#have_enqueued_sidekiq_job)
 
 ### be_delayed
 *Describes a method that should be invoked asynchronously (See [Sidekiq Delayed Extensions][sidekiq_wiki_delayed_extensions])*
@@ -87,7 +87,7 @@ it { is_expected.to be_processed_in :download }
 ```
 
 ### be_retryable
-*Describes if a job should retry when there is a failure in it's execution*
+*Describes if a job should retry when there is a failure in its execution*
 ```ruby
 sidekiq_options retry: 5
 # test with...
@@ -102,7 +102,7 @@ it { is_expected.to be_retryable false }
 ```
 
 ### save_backtrace
-*Describes if a job should save the error backtrace when there is a failure in it's execution*
+*Describes if a job should save the error backtrace when there is a failure in its execution*
 ```ruby
 sidekiq_options backtrace: 5
 # test with...
@@ -119,7 +119,7 @@ it { is_expected.to save_backtrace false }
 ```
 
 ### be_unique
-*Describes when a job should be unique within it's queue*
+*Describes when a job should be unique within its queue*
 ```ruby
 sidekiq_options unique: true
 # test with...
@@ -136,25 +136,34 @@ it { is_expected.to be_expired_in 1.hour }
 it { is_expected.to_not be_expired_in 2.hours }
 ```
 
-### have_enqueued_job
+### have_enqueued_sidekiq_job
 *Describes that there should be an enqueued job with the specified arguments*
+
+**Note:** When using rspec-rails >= 3.4, use `have_enqueued_sidekiq_job` instead to
+prevent a name clash with rspec-rails' ActiveJob matcher.
+
 ```ruby
 AwesomeJob.perform_async 'Awesome', true
 # test with...
+expect(AwesomeJob).to have_enqueued_sidekiq_job('Awesome', true)
+
+# Code written with older versions of the gem may use the deprecated
+# have_enqueued_job matcher.
 expect(AwesomeJob).to have_enqueued_job('Awesome', true)
 ```
 
 #### Testing scheduled jobs
 *Use chainable matchers `#at` and `#in`*
 ```ruby
-Awesomejob.perform_at 5.minutes.from_now, 'Awesome', true
+time = 5.minutes.from_now
+Awesomejob.perform_at time, 'Awesome', true
 # test with...
-expect(AwesomeJob).to have_enqueued_job('Awesome', true).at(5.minutes.from_now)
+expect(AwesomeJob).to have_enqueued_sidekiq_job('Awesome', true).at(time)
 ```
 ```ruby
 Awesomejob.perform_in 5.minutes, 'Awesome', true
 # test with...
-expect(AwesomeJob).to have_enqueued_job('Awesome', true).in(5.minutes)
+expect(AwesomeJob).to have_enqueued_sidekiq_job('Awesome', true).in(5.minutes)
 ```
 
 ## Example matcher usage
@@ -170,7 +179,7 @@ describe AwesomeJob do
   it 'enqueues another awesome job' do
     subject.perform
 
-    expect(AnotherAwesomeJob).to have_enqueued_job('Awesome', true)
+    expect(AnotherAwesomeJob).to have_enqueued_sidekiq_job('Awesome', true)
   end
 end
 ```
@@ -197,7 +206,6 @@ FooClass.within_sidekiq_retries_exhausted_block {
 ```bundle exec rspec spec```
 
 ## Maintainers
-* @wpolicarpo
 * @packrat386
 * @philostler
 

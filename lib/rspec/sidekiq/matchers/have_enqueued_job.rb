@@ -1,13 +1,13 @@
 module RSpec
   module Sidekiq
     module Matchers
-      def have_enqueued_job(*expected_arguments)
+      def have_enqueued_sidekiq_job(*expected_arguments)
         HaveEnqueuedJob.new expected_arguments
       end
 
-      if Gem::Dependency.new('rspec-rails', '>= 3.4.0').matching_specs.max_by(&:version)
+      def have_enqueued_job(*expected_arguments)
         warn "[DEPRECATION] `have_enqueued_job` is deprecated.  Please use `have_enqueued_sidekiq_job` instead."
-        alias have_enqueued_sidekiq_job have_enqueued_job
+        have_enqueued_sidekiq_job(*expected_arguments)
       end
 
       class JobOptionParser
@@ -25,12 +25,12 @@ module RSpec
         private
 
         def at_evaluator(value)
-          return false if job['at'].blank?
+          return false if job['at'].to_s.empty?
           value.to_time.to_s == Time.at(job['at']).to_s
         end
 
         def in_evaluator(value)
-          return false if job['at'].blank?
+          return false if job['at'].to_s.empty?
           (Time.now + value).to_s == Time.at(job['at']).to_s
         end
       end
