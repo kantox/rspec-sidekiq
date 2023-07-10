@@ -1,0 +1,84 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+      - master
+      - '*v'
+  pull_request:
+    branches:
+      - '**'
+jobs:
+  test:
+    name: 'Ruby: ${{ matrix.ruby-version }} ${{ matrix.gemfile }}'
+    continue-on-error: true
+    strategy:
+      matrix:
+        ruby-version: ['2.2.10']
+        gemfile: ['sidekiq52_rails40']
+        frozen-string: [false]
+        allow-failure: [false]
+        os: [ubuntu-20.04]
+        include:
+          - ruby-version: '2.2.10'
+            gemfile: 'sidekiq52_rails42'
+            frozen-string: false
+            allow-failure: false
+            os: ubuntu-20.04
+          - ruby-version: '2.2.10'
+            gemfile: 'sidekiq52_rails52'
+            frozen-string: false
+            allow-failure: false
+            os: ubuntu-20.04
+          - ruby-version: '2.4'
+            gemfile: 'sidekiq52_rails42'
+            frozen-string: true
+            allow-failure: false
+            os: ubuntu-latest
+          - ruby-version: '2.4'
+            gemfile: 'sidekiq52_rails52'
+            frozen-string: true
+            allow-failure: false
+            os: ubuntu-latest
+          - ruby-version: '2.5'
+            gemfile: 'sidekiq52_rails42'
+            frozen-string: true
+            allow-failure: false
+            os: ubuntu-latest
+          - ruby-version: '2.6'
+            gemfile: 'sidekiq52_rails42'
+            frozen-string: true
+            allow-failure: false
+            os: ubuntu-latest
+          - ruby-version: '2.7'
+            gemfile: 'sidekiq52_rails52'
+            frozen-string: true
+            allow-failure: true
+            os: ubuntu-latest
+          - ruby-version: '3.0'
+            gemfile: 'sidekiq52_rails52'
+            frozen-string: true
+            allow-failure: true
+            os: ubuntu-latest
+          - ruby-version: '3.1'
+            gemfile: 'sidekiq52_rails52'
+            frozen-string: true
+            allow-failure: true
+            os: ubuntu-latest
+          - ruby-version: '3.2'
+            gemfile: 'sidekiq52_rails52'
+            frozen-string: true
+            allow-failure: true
+            os: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    env:
+      BUNDLE_GEMFILE: '${{ github.workspace }}/gemfiles/${{ matrix.gemfile }}.gemfile'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+      - run: echo "{RUBYOPT}={--enable-frozen-string-literal}" >> $GITHUB_ENV
+        if: ${{ matrix.frozen-string }}
+      - run: bundle exec rspec
