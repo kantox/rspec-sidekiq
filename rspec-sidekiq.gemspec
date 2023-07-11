@@ -22,7 +22,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'activerecord'
   s.add_development_dependency 'activemodel'
   s.add_development_dependency 'activesupport'
-
+  # 2.21 has weird patch version updates some of the creating conflicts due to ruby 2.5 requirement and nokogiri
+  # Here we forced the previous minor version
+  s.add_development_dependency 'loofah', '~> 2.20.0'
 
   s.files = Dir['.gitattributes'] +
             Dir['.gitignore'] +
