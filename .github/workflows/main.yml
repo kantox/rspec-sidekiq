@@ -11,95 +11,111 @@ on:
 
 jobs:
   test:
-    name: 'Ruby: ${{ matrix.ruby-version }} - Gemfile: ${{ matrix.gemfile }}'
+    name: 'Ruby: ${{ matrix.ruby-version }} - Sidekiq: ${{ matrix.sidekiq_version }} - Rails: ${{ matrix.rails_version }}'
     runs-on: ubuntu-20.04
     continue-on-error: ${{ matrix.allow-failure }}
     strategy:
       fail-fast: false
       matrix:
         ruby-version: ['3.2']
+        sidekiq-version: ['7.0']
+        rails-version: ['7.0']
         allow-failure: [false]
         frozen-string: [true]
-        gemfile: ['sidekiq7_rails7']
         push-gem: [true]
         include:
           - ruby-version: '2.2'
             allow-failure: false
             frozen-string: false
-            gemfile: 'sidekiq5_rails4_0'
+            sidekiq-version: '5.2'
+            rails-version: '4.0'
             push-gem: false
           - ruby-version: '2.2'
             allow-failure: false
             frozen-string: false
-            gemfile: 'sidekiq5_rails4_2'
+            sidekiq-version: '5.2'
+            rails-version: '4.2'
             push-gem: false
           - ruby-version: '2.4'
             allow-failure: false
             frozen-string: true
-            gemfile: 'sidekiq5_rails4_2'
+            sidekiq-version: '5.2'
+            rails-version: '4.2'
             push-gem: false
           - ruby-version: '2.4'
             allow-failure: false
             frozen-string: true
-            gemfile: 'sidekiq5_rails5_0'
+            sidekiq-version: '5.2'
+            rails-version: '5.0'
             push-gem: false
           - ruby-version: '2.5'
             allow-failure: false
             frozen-string: true
-            gemfile: 'sidekiq6_4_rails5_2'
+            sidekiq-version: '5.2'
+            rails-version: '5.0'
             push-gem: false
           - ruby-version: '2.7'
             allow-failure: false
             frozen-string: true
-            gemfile: 'sidekiq6_4_rails6'
+            sidekiq-version: '6.4'
+            rails-version: '6.0'
             push-gem: false
           - ruby-version: '2.7'
             allow-failure: false
             frozen-string: true
-            gemfile: 'sidekiq6_5_rails6'
+            sidekiq-version: '6.5'
+            rails-version: '6.0'
             push-gem: false
           - ruby-version: '3.0'
             allow-failure: false
             frozen-string: true
-            gemfile: 'sidekiq6_4_rails6'
+            sidekiq-version: '6.4'
+            rails-version: '6.0'
             push-gem: false
           - ruby-version: '3.0'
             allow-failure: false
             frozen-string: true
-            gemfile: 'sidekiq6_5_rails6'
+            sidekiq-version: '6.5'
+            rails-version: '6.0'
             push-gem: false
           - ruby-version: '3.0'
             allow-failure: false
             frozen-string: true
-            gemfile: 'sidekiq7_rails7'
+            sidekiq-version: '7.0'
+            rails-version: '7.0'
             push-gem: false
           - ruby-version: '3.1'
             allow-failure: false
             frozen-string: true
-            gemfile: 'sidekiq6_4_rails6'
+            sidekiq-version: '6.4'
+            rails-version: '6.0'
             push-gem: false
           - ruby-version: '3.1'
             allow-failure: false
             frozen-string: true
-            gemfile: 'sidekiq6_5_rails6'
+            sidekiq-version: '6.5'
+            rails-version: '6.0'
             push-gem: false
           - ruby-version: '3.1'
             allow-failure: false
             frozen-string: true
-            gemfile: 'sidekiq7_rails7'
             push-gem: false
           - ruby-version: '3.2'
             allow-failure: false
             frozen-string: true
-            gemfile: 'sidekiq6_4_rails6'
+            sidekiq-version: '6.4'
+            rails-version: '6.0'
             push-gem: false
           - ruby-version: '3.2'
             allow-failure: false
             frozen-string: true
-            gemfile: 'sidekiq6_5_rails6'
+            sidekiq-version: '6.5'
+            rails-version: '6.0'
             push-gem: false
     env:
       BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.gemfile }}.gemfile
+      SIDEKIQ_VERSION: ${{ matrix.sidekiq-version }}
+      RAILS_VERSION: ${{ matrix.rails-version }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up using Ruby ${{ matrix.ruby-version }} with Gemfile '${{ matrix.gemfile }}'
