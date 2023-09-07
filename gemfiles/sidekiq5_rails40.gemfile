@@ -1,0 +1,10 @@
+source 'https://rubygems.org'
+
+gem 'sidekiq', '~> 5.0'
+gem 'activejob', '~> 4.0'
+gem 'actionmailer', '~> 4.0'
+gem 'activerecord', '~> 4.0'
+gem "activemodel", "~> 4.0"
+gem "railties", "~> 4.0"
+
+gemspec :path => '../'
