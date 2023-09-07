@@ -142,7 +142,7 @@ RSpec.describe RSpec::Sidekiq::Matchers::HaveEnqueuedSidekiqJob do
     it 'returns message' do
       jid = worker.perform_async *worker_args
       argument_subject.matches? worker
-      expect(argument_subject.failure_message).to eq <<~eos.strip
+      expect(argument_subject.failure_message_when_negated).to eq <<-eos.gsub(/^ {6}/, '').strip
       expected to have an enqueued #{worker} job
         with arguments:
           -["string", 1, true, {"bar"=>"foo", "key"=>"value", "nested"=>[{"hash"=>true}]}]
@@ -159,7 +159,7 @@ RSpec.describe RSpec::Sidekiq::Matchers::HaveEnqueuedSidekiqJob do
       it "returns a message showing the wrapped array in expectations but each job on its own line" do
         jids = 2.times.map { worker.perform_async *worker_args }
         argument_subject.matches? worker
-        expect(argument_subject.failure_message).to eq <<~eos.strip
+        expect(argument_subject.failure_message_when_negated).to eq <<-eos.gsub(/^ {6}/, '').strip
         expected to have an enqueued #{worker} job
           with arguments:
             -[["string", 1, true, {"bar"=>"foo", "key"=>"value", "nested"=>[{"hash"=>true}]}]]

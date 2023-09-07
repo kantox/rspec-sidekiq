@@ -58,11 +58,6 @@ jobs:
             frozen-string: true
             gemfile: 'sidekiq6_5_rails6'
             push-gem: false
-          - ruby-version: '2.7'
-            allow-failure: false
-            frozen-string: true
-            gemfile: 'sidekiq7_rails6'
-            push-gem: false
           - ruby-version: '3.0'
             allow-failure: false
             frozen-string: true
