@@ -19,63 +19,63 @@ jobs:
       matrix:
         ruby-version: ['3.2']
         allow-failure: [false]
-        frozen-string: [false]
+        frozen-string: [true]
         gemfile: ['sidekiq7_rails7']
         push-gem: [true]
         include:
           - ruby-version: '2.2'
             allow-failure: false
-            frozen-string: false
+            frozen-string: true
             gemfile: 'sidekiq5_rails4_0'
             push-gem: false
           - ruby-version: '2.2'
             allow-failure: false
-            frozen-string: false
+            frozen-string: true
             gemfile: 'sidekiq5_rails4_2'
             push-gem: false
           - ruby-version: '2.4'
             allow-failure: false
-            frozen-string: false
+            frozen-string: true
             gemfile: 'sidekiq5_rails4_2'
             push-gem: false
           - ruby-version: '2.4'
             allow-failure: false
-            frozen-string: false
+            frozen-string: true
             gemfile: 'sidekiq5_rails5_0'
             push-gem: false
           - ruby-version: '2.5'
             allow-failure: false
-            frozen-string: false
+            frozen-string: true
             gemfile: 'sidekiq6_4_rails5_2'
             push-gem: false
           - ruby-version: '2.7'
             allow-failure: false
-            frozen-string: false
+            frozen-string: true
             gemfile: 'sidekiq6_4_rails6'
             push-gem: false
           - ruby-version: '2.7'
             allow-failure: false
-            frozen-string: false
+            frozen-string: true
             gemfile: 'sidekiq6_5_rails6'
             push-gem: false
           - ruby-version: '2.7'
             allow-failure: false
-            frozen-string: false
+            frozen-string: true
             gemfile: 'sidekiq7_rails6'
             push-gem: false
           - ruby-version: '3.0'
             allow-failure: false
-            frozen-string: false
+            frozen-string: true
             gemfile: 'sidekiq6_4_rails6'
             push-gem: false
           - ruby-version: '3.0'
             allow-failure: false
-            frozen-string: false
+            frozen-string: true
             gemfile: 'sidekiq6_5_rails6'
             push-gem: false
           - ruby-version: '3.0'
             allow-failure: false
-            frozen-string: false
+            frozen-string: true
             gemfile: 'sidekiq7_rails7'
             push-gem: false
           - ruby-version: '3.1'
