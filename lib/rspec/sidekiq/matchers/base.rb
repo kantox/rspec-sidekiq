@@ -10,7 +10,7 @@ module RSpec
         end
 
         def matches?(options)
-          with_context(**options)
+          with_context(**options.symbolize_keys)
         end
 
         private
@@ -22,7 +22,7 @@ module RSpec
 
         def with_context(**expected_context)
           expected_context.all? do |key, value|
-            if key == "at"
+            if key == :at
               # send to custom evaluator
               at_evaluator(value)
             else

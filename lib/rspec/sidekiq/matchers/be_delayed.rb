@@ -9,7 +9,7 @@ module RSpec
 
       class BeDelayed
         def initialize(*expected_arguments)
-          raise <<~MSG if RSpec::Sidekiq.configuration.sidekiq_gte_7?
+          raise <<-MSG if RSpec::Sidekiq.configuration.sidekiq_gte_7?
             Use of the be_delayed matcher with Sidekiq 7+ is not possible. Try refactoring to a Sidekiq Job with `perform_at` or `perform_in` and the `have_enqueued_sidekiq_job` matcher
           MSG
 
