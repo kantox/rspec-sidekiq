@@ -12,7 +12,7 @@ on:
 jobs:
   test:
     name: "Ruby: ${{ matrix.ruby-version }} - Sidekiq: ${{ matrix.sidekiq-version }} Rails: ${{ matrix.rails-version }}"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-${{ matrix.ubuntu-version }}
     continue-on-error: ${{ matrix.allow-failure }}
     strategy:
       fail-fast: false
@@ -23,94 +23,112 @@ jobs:
         allow-failure: [false]
         frozen-string: [true]
         push-gem: [true]
+        ubuntu-version: ["22.04"]
         include:
           - ruby-version: '2.2'
             allow-failure: false
             frozen-string: false
             sidekiq-version: '5.2'
             rails-version: '4.0'
+            ubuntu-version: '20.04'
             push-gem: false
           - ruby-version: '2.2'
             allow-failure: false
             frozen-string: false
             sidekiq-version: '5.2'
             rails-version: '4.2'
+            ubuntu-version: '20.04'
             push-gem: false
           - ruby-version: '2.4'
             allow-failure: false
             frozen-string: true
             sidekiq-version: '5.2'
             rails-version: '4.2'
+            ubuntu-version: '20.04'
             push-gem: false
           - ruby-version: '2.4'
             allow-failure: false
             frozen-string: true
             sidekiq-version: '5.2'
             rails-version: '5.0'
+            ubuntu-version: '20.04'
             push-gem: false
           - ruby-version: '2.5'
             allow-failure: false
             frozen-string: true
             sidekiq-version: '5.2'
             rails-version: '5.0'
+            ubuntu-version: '20.04'
             push-gem: false
           - ruby-version: '2.7'
             allow-failure: false
             frozen-string: true
             sidekiq-version: '6.4'
             rails-version: '6.0'
+            ubuntu-version: '22.04'
             push-gem: false
           - ruby-version: '2.7'
             allow-failure: false
             frozen-string: true
             sidekiq-version: '6.5'
             rails-version: '6.0'
+            ubuntu-version: '22.04'
             push-gem: false
           - ruby-version: '3.0'
             allow-failure: false
             frozen-string: true
             sidekiq-version: '6.4'
             rails-version: '6.0'
+            ubuntu-version: '22.04'
             push-gem: false
           - ruby-version: '3.0'
             allow-failure: false
             frozen-string: true
             sidekiq-version: '6.5'
             rails-version: '6.0'
+            ubuntu-version: '22.04'
             push-gem: false
           - ruby-version: '3.0'
             allow-failure: false
             frozen-string: true
             sidekiq-version: '7.0'
             rails-version: '7.0'
+            ubuntu-version: '22.04'
             push-gem: false
           - ruby-version: '3.1'
             allow-failure: false
             frozen-string: true
             sidekiq-version: '6.4'
             rails-version: '6.0'
+            ubuntu-version: '22.04'
             push-gem: false
           - ruby-version: '3.1'
             allow-failure: false
             frozen-string: true
             sidekiq-version: '6.5'
             rails-version: '6.0'
+            ubuntu-version: '22.04'
             push-gem: false
           - ruby-version: '3.1'
             allow-failure: false
             frozen-string: true
+            rails-version: '7.0'
+            sidekiq-version: '7.0'
+            ubuntu-version: '22.04'
             push-gem: false
           - ruby-version: '3.2'
             allow-failure: false
             frozen-string: true
             sidekiq-version: '6.4'
             rails-version: '6.0'
+            ubuntu-version: '22.04'
             push-gem: false
           - ruby-version: '3.2'
             allow-failure: false
             frozen-string: true
             sidekiq-version: '6.5'
             rails-version: '6.0'
+            ubuntu-version: '22.04'
             push-gem: false
     env:
       SIDEKIQ_VERSION: ${{ matrix.sidekiq-version }}
