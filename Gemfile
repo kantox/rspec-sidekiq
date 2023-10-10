@@ -17,9 +17,12 @@ gem 'activejob', "~> #{ENV.fetch('RAILS_VERSION')}.0"
 #   uninitialized constant Nokogiri::HTML4
 #
 if ENV['RUBY_VERSION'].to_f <= 2.4
-  gem "loofah", "~> 2.20.0"
+  gem 'loofah', '~> 2.20.0'
   gem 'nokogiri', '~> 1.8.5'
   gem 'rspec-core', '~> 3.8'
+else
+  gem 'loofah'
+  gem 'rspec-core'
 end
 
 gemspec
