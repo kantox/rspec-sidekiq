@@ -131,6 +131,7 @@ jobs:
             ubuntu-version: '22.04'
             push-gem: false
     env:
+      RUBY_VERSION: ${{ matrix.ruby-version }}
       SIDEKIQ_VERSION: ${{ matrix.sidekiq-version }}
       RAILS_VERSION: ${{ matrix.rails-version }}
     steps:
