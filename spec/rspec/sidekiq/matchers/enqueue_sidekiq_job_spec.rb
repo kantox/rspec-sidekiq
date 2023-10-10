@@ -143,9 +143,7 @@ RSpec.describe RSpec::Sidekiq::Matchers::EnqueueSidekiqJob do
 
     context "in a specific interval" do
       around do |example|
-        freeze_time do
-          example.run
-        end
+        Timecop.freeze { example.run }
       end
 
       it "passes if the job is enqueued for the time in that interval" do

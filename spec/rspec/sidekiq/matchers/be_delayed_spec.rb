@@ -14,7 +14,7 @@ RSpec.describe RSpec::Sidekiq::Matchers::BeDelayed do
     let(:delay_until_with_arguments_subject) { RSpec::Sidekiq::Matchers::BeDelayed.new(Object).until Time.now + 3600 }
 
     around(:each) do |example|
-      travel_to Time.new(2023, 8, 1, 0, 0, 0, "-05:00") do
+      Timecop.travel Time.new(2023, 8, 1, 0, 0, 0, "-05:00") do
         example.run
       end
     end

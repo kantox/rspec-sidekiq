@@ -5,42 +5,149 @@ name: main build
 run-name: ${{ github.actor }} 🚀 ${{github.ref_name}}
 on:
   push:
-    branches:
-      - 'main'
   pull_request:
   schedule:
     - cron: '30 15 * * *'
 
-permissions:
-  contents: read
-
 jobs:
   test:
-    runs-on: ubuntu-latest
+    name: "Ruby: ${{ matrix.ruby-version }} - Sidekiq: ${{ matrix.sidekiq-version }} Rails: ${{ matrix.rails-version }}"
+    runs-on: ubuntu-${{ matrix.ubuntu-version }}
+    continue-on-error: ${{ matrix.allow-failure }}
     strategy:
+      fail-fast: false
       matrix:
-        ruby-version:
-          - '2.7'
-          - '3.0'
-          - '3.1'
-          - '3.2'
-        gemfile:
-          - 'Gemfile'
-          - 'gemfiles/sidekiq5_rails6.gemfile'
-          - 'gemfiles/sidekiq6_4_rails6.gemfile'
-          - 'gemfiles/sidekiq6_4_rails7.gemfile'
-          - 'gemfiles/sidekiq6_5_rails6.gemfile'
-          - 'gemfiles/sidekiq6_5_rails7.gemfile'
-          - 'gemfiles/sidekiq7_rails7.gemfile'
+        ruby-version: ['3.2']
+        sidekiq-version: ['7.0']
+        rails-version: ['7.1']
+        allow-failure: [false]
+        frozen-string: [true]
+        push-gem: [true]
+        ubuntu-version: ["22.04"]
+        include:
+          - ruby-version: '2.2'
+            allow-failure: false
+            frozen-string: false
+            sidekiq-version: '5.2'
+            rails-version: '4.0'
+            ubuntu-version: '20.04'
+            push-gem: false
+          - ruby-version: '2.2'
+            allow-failure: false
+            frozen-string: false
+            sidekiq-version: '5.2'
+            rails-version: '4.2'
+            ubuntu-version: '20.04'
+            push-gem: false
+          - ruby-version: '2.4'
+            allow-failure: false
+            frozen-string: true
+            sidekiq-version: '5.2'
+            rails-version: '4.2'
+            ubuntu-version: '20.04'
+            push-gem: false
+          - ruby-version: '2.4'
+            allow-failure: false
+            frozen-string: true
+            sidekiq-version: '5.2'
+            rails-version: '5.0'
+            ubuntu-version: '20.04'
+            push-gem: false
+          - ruby-version: '2.5'
+            allow-failure: false
+            frozen-string: true
+            sidekiq-version: '5.2'
+            rails-version: '5.0'
+            ubuntu-version: '20.04'
+            push-gem: false
+          - ruby-version: '2.7'
+            allow-failure: false
+            frozen-string: true
+            sidekiq-version: '6.4'
+            rails-version: '6.0'
+            ubuntu-version: '22.04'
+            push-gem: false
+          - ruby-version: '2.7'
+            allow-failure: false
+            frozen-string: true
+            sidekiq-version: '6.5'
+            rails-version: '6.0'
+            ubuntu-version: '22.04'
+            push-gem: false
+          - ruby-version: '3.0'
+            allow-failure: false
+            frozen-string: true
+            sidekiq-version: '6.4'
+            rails-version: '6.0'
+            ubuntu-version: '22.04'
+            push-gem: false
+          - ruby-version: '3.0'
+            allow-failure: false
+            frozen-string: true
+            sidekiq-version: '6.5'
+            rails-version: '6.0'
+            ubuntu-version: '22.04'
+            push-gem: false
+          - ruby-version: '3.0'
+            allow-failure: false
+            frozen-string: true
+            sidekiq-version: '7.0'
+            rails-version: '7.0'
+            ubuntu-version: '22.04'
+            push-gem: false
+          - ruby-version: '3.1'
+            allow-failure: false
+            frozen-string: true
+            sidekiq-version: '6.4'
+            rails-version: '6.0'
+            ubuntu-version: '22.04'
+            push-gem: false
+          - ruby-version: '3.1'
+            allow-failure: false
+            frozen-string: true
+            sidekiq-version: '6.5'
+            rails-version: '6.0'
+            ubuntu-version: '22.04'
+            push-gem: false
+          - ruby-version: '3.1'
+            allow-failure: false
+            frozen-string: true
+            rails-version: '7.0'
+            sidekiq-version: '7.0'
+            ubuntu-version: '22.04'
+            push-gem: false
+          - ruby-version: '3.2'
+            allow-failure: false
+            frozen-string: true
+            sidekiq-version: '6.4'
+            rails-version: '6.0'
+            ubuntu-version: '22.04'
+            push-gem: false
+          - ruby-version: '3.2'
+            allow-failure: false
+            frozen-string: true
+            sidekiq-version: '6.5'
+            rails-version: '6.0'
+            ubuntu-version: '22.04'
+            push-gem: false
+          - ruby-version: '3.2'
+            allow-failure: false
+            frozen-string: true
+            sidekiq-version: '7.0'
+            rails-version: '7.0'
+            ubuntu-version: '22.04'
+            push-gem: false
     env:
-      BUNDLE_GEMFILE: ${{ github.workspace }}/${{ matrix.gemfile }}
+      RUBY_VERSION: ${{ matrix.ruby-version }}
+      SIDEKIQ_VERSION: ${{ matrix.sidekiq-version }}
+      RAILS_VERSION: ${{ matrix.rails-version }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up using Ruby ${{ matrix.ruby-version }} with Gemfile '${{ matrix.gemfile }}'
       # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
       # change this to (see https://github.com/ruby/setup-ruby#versioning):
-      # uses: ruby/setup-ruby@v1
-        uses: ruby/setup-ruby@ee2113536afb7f793eed4ce60e8d3b26db912da4 # v1.127.0
+      #uses: ruby/setup-ruby@ee2113536afb7f793eed4ce60e8d3b26db912da4 # v1.127.0
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
@@ -48,3 +155,33 @@ jobs:
         run: bundle exec rspec spec
       - name: Check for implicitly loaded dependencies # See #204
         run: bundle exec ruby ./lib/rspec-sidekiq.rb
+      # another option is to search for something like [PUSH_BETA_GEM] in event.payload.commits[0].message
+      - name: Publish Beta to GitHub Packages
+        if: ${{ github.event.ref != 'refs/heads/master' && ! contains(github.event.ref, 'refs/tags') && matrix.push-gem }}
+        run: |
+          set +x
+          mkdir -p $HOME/.gem
+          cat << EOF > ~/.gem/credentials
+          ---
+          :github: Bearer ${GITHUB_TOKEN}
+          EOF
+          chmod 0600 $HOME/.gem/credentials
+          set -x
+
+          git config --global --add safe.directory "$(pwd)"
+
+          gem build $GEMSPEC | tee build.log
+          export GEM_VERSION=$(grep Version build.log | cut -d ':' -f 2 | xargs)
+          if [[ $GEM_VERSION =~ beta[0-9]*$ ]]; then
+            echo 'publish beta version'
+            gem push --key github --host https://rubygems.pkg.github.com/${OWNER} *.gem
+          else
+            echo 'Only beta versions are allowed'
+            exit 1
+          fi
+        env:
+          GEMSPEC: ${{github.event.repository.name}}.gemspec
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          OWNER: ${{github.event.repository.owner.login}}
+
+

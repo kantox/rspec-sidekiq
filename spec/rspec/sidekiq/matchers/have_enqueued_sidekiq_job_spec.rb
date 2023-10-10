@@ -51,9 +51,14 @@ RSpec.describe RSpec::Sidekiq::Matchers::HaveEnqueuedSidekiqJob do
           let(:interval) { 1.day }
 
           it "matches on a scheduled job with #perform_in" do
-            travel_to Time.new(2023, 3, 12, 0, 0, 0, "-05:00") do # 2 hours before DST starts
-              worker.perform_in interval, *worker_args_in
-              expect(worker).to have_enqueued_sidekiq_job(*worker_args_in).in(interval)
+            Timecop.travel Time.new(2023, 3, 12, 0, 0, 0, "-05:00") do # 2 hours before DST starts
+              if ENV['RUBY_VERSION'].to_f < 2.7
+                worker.perform_in interval, worker_args_in
+                expect(worker).to have_enqueued_sidekiq_job(worker_args_in).in(interval)
+              else
+                worker.perform_in interval, *worker_args_in
+                expect(worker).to have_enqueued_sidekiq_job(*worker_args_in).in(interval)
+              end
             end
           end
         end
@@ -107,7 +112,8 @@ RSpec.describe RSpec::Sidekiq::Matchers::HaveEnqueuedSidekiqJob do
       end
 
       it 'matches on ActionMailer with a resource Job' do
-        TestActionMailer.testmail(resource).deliver_later
+        TestActionMailer.testmail(*resource).deliver_later
+
         expect(Sidekiq::Worker).to have_enqueued_sidekiq_job(
           'TestActionMailer',
           'testmail',
@@ -142,7 +148,7 @@ RSpec.describe RSpec::Sidekiq::Matchers::HaveEnqueuedSidekiqJob do
     it 'returns message' do
       jid = worker.perform_async *worker_args
       argument_subject.matches? worker
-      expect(argument_subject.failure_message).to eq <<~eos.strip
+      expect(argument_subject.failure_message).to eq <<-eos.gsub(/^ {6}/, '').strip
       expected to have an enqueued #{worker} job
         with arguments:
           -["string", 1, true, {"bar"=>"foo", "key"=>"value", "nested"=>[{"hash"=>true}]}]
@@ -159,7 +165,7 @@ RSpec.describe RSpec::Sidekiq::Matchers::HaveEnqueuedSidekiqJob do
       it "returns a message showing the wrapped array in expectations but each job on its own line" do
         jids = 2.times.map { worker.perform_async *worker_args }
         argument_subject.matches? worker
-        expect(argument_subject.failure_message).to eq <<~eos.strip
+        expect(argument_subject.failure_message).to eq <<-eos.gsub(/^ {8}/, '').strip
         expected to have an enqueued #{worker} job
           with arguments:
             -[["string", 1, true, {"bar"=>"foo", "key"=>"value", "nested"=>[{"hash"=>true}]}]]
