@@ -26,7 +26,7 @@ module RSpec
               # send to custom evaluator
               at_evaluator(value)
             else
-              job.context.has_key?(key) && job.context[key] == value
+              job.context.key?(key.to_s) && job.context[key.to_s] == value
             end
           end
         end

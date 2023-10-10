@@ -5,7 +5,7 @@ require 'rspec-sidekiq'
 
 require 'active_job'
 require 'action_mailer'
-require 'active_support/testing/time_helpers'
+require 'timecop'
 
 require_relative 'support/init'
 
@@ -13,7 +13,6 @@ RSpec.configure do |config|
   config.disable_monkey_patching!
 
   config.include RSpec::Sidekiq::Spec::Support::Factories
-  config.include ActiveSupport::Testing::TimeHelpers
 
   # Add a setting to store our Sidekiq Version and share that around the specs
   config.add_setting :sidekiq_gte_7

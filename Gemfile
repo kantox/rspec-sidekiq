@@ -5,13 +5,12 @@ platforms :rbx do
   gem 'rubinius-developer_tools'
 end
 
-gem 'sidekiq', "~> #{ENV.fetch('SIDEKIQ_VERSION')}"
-gem 'activejob', "~> #{ENV.fetch('RAILS_VERSION')}"
-gem 'actionmailer', "~> #{ENV.fetch('RAILS_VERSION')}"
-gem 'activerecord', "~> #{ENV.fetch('RAILS_VERSION')}"
-gem "activemodel", "~> #{ENV.fetch('RAILS_VERSION')}"
-gem "railties", "~> #{ENV.fetch('RAILS_VERSION')}"
-
+gem 'sidekiq', "~> #{ENV.fetch('SIDEKIQ_VERSION')}.0"
+gem 'actionmailer', "~> #{ENV.fetch('RAILS_VERSION')}.0"
+gem 'activerecord', "~> #{ENV.fetch('RAILS_VERSION')}.0"
+gem 'activemodel', "~> #{ENV.fetch('RAILS_VERSION')}.0"
+gem 'railties', "~> #{ENV.fetch('RAILS_VERSION')}.0"
+gem 'activejob', "~> #{ENV.fetch('RAILS_VERSION')}.0"
 
 # The gem is bugged/incompatible in later versions due to nokogiri conflict
 # and ruby versions
