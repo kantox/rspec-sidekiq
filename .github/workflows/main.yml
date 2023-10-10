@@ -19,7 +19,7 @@ jobs:
       matrix:
         ruby-version: ['3.2']
         sidekiq-version: ['7.0']
-        rails-version: ['7.0']
+        rails-version: ['7.1']
         allow-failure: [false]
         frozen-string: [true]
         push-gem: [true]
@@ -128,6 +128,13 @@ jobs:
             frozen-string: true
             sidekiq-version: '6.5'
             rails-version: '6.0'
+            ubuntu-version: '22.04'
+            push-gem: false
+          - ruby-version: '3.2'
+            allow-failure: false
+            frozen-string: true
+            sidekiq-version: '7.0'
+            rails-version: '7.0'
             ubuntu-version: '22.04'
             push-gem: false
     env:
